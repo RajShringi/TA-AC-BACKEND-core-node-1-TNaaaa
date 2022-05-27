@@ -4,7 +4,7 @@ let server = http.createServer(hanldeRequest);
 
 function hanldeRequest(req, res) {
   res.statusCode = 202;
-  res.end(res.statusCode);
+  res.end(`${res.statusCode}`);
 }
 
 server.listen(3333, () => {
