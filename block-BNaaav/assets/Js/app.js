@@ -1,15 +1,13 @@
 let http = require("http");
 let fs = require("fs");
-
 let server = http.createServer(handleRequest);
 
 function handleRequest(req, res) {
+  console.log(req.url);
   if (req.method === "GET" && req.url === "/") {
-    console.log(req.url);
     res.setHeader("Content-Type", "text/html");
     fs.createReadStream("../../index.html").pipe(res);
   } else if (req.method === "GET" && req.url === "/about") {
-    console.log(req.url);
     res.setHeader("Content-Type", "text/html");
     fs.createReadStream("../../about.html").pipe(res);
   } else if (req.method === "GET" && req.url === "/blog") {
@@ -24,6 +22,21 @@ function handleRequest(req, res) {
   } else if (req.method === "GET" && req.url === "/services") {
     res.setHeader("Content-Type", "text/html");
     fs.createReadStream("../../services.html").pipe(res);
+  } else if (req.url.split(".").pop() === "css") {
+    res.setHeader("Content-Type", "text/css");
+    fs.readFile("../stylesheet/style.css", (err, content) => {
+      if (err) return console.log(err);
+      res.end(content);
+    });
+  } else if (
+    req.url.split(".").pop() === "png" ||
+    req.url.split(".").pop() === "jpg"
+  ) {
+    res.setHeader("Content-Type", "image/png");
+    fs.readFile("../../" + req.url, (err, content) => {
+      if (err) return console.log(err);
+      res.end(content);
+    });
   } else {
     res.end("page not found");
   }
